@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<title>微信摇一摇</title>
+</head>
+
+<body>
+<div class="ernie">
+    <div class="pers">每秒钟显示次数</div>
+    <div class="time_remain" style="display:none;"><span>10</span></div>
+    <div class="gameover">游戏结束</div>
+    <p class="num">目前已有<span>70</span>人参与摇一摇活动</p>
+    <div class="result">     
+        <div class="result_table">
+            <table>
+                <thead>             
+                    <tr>
+                        <th>排名</th>
+                        <th>头像</th>
+                        <th>昵称</th>
+                        <th>次数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>NO.<span>01</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NO.<span>02</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NO.<span>03</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NO.<span>04</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>NO.<span>05</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NO.<span>06</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NO.<span>07</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NO.<span>08</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NO.<span>09</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NO.<span>10</span></td>
+                        <td><img src="img/tx_03.jpg" alt=""></td>
+                        <td>
+                            <span class="user has_winning">廖日娟</span>
+                        </td>
+                        <td>
+                            <span>1113</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- <audio src="img/a.mp3" autoplay="autoplay" hidden></audio> -->
+</div>
+<script type="text/javascript">
+
+$(function(){
+
+    var btn = false;
+    function countdown(){
+        var time = 10;
+        btn = true;
+        i = 0;
+        $(".time_remain span").text('10')
+        $(".time_remain").show();
+        $(".gameover").hide();
+        setInterval(function(){
+            if(time > 0){
+                time -= 1;
+                $(".time_remain span").text('0'+time).addClass("countdown2")
+            }
+        },1000)
+        setTimeout(function(){
+            $(".time_remain").hide();
+            $(".gameover").show();
+            $(".time_remain span").text('10')
+            btn = false;
+        },10000)
+    }
+
+    window.onload = countdown(); 
+
+    var box = document.getElementsByClassName("test")[0];
+    if (window.DeviceMotionEvent) {
+        window.addEventListener('devicemotion', deviceMotionHandler, false);
+    } else {
+        alert('大哥，换个iphone再来玩吧！');
+    };
+
+    var i = 0;
+    var speed = 25;
+    var x = y = z = lastX = lastY = lastZ = 0;
+    function deviceMotionHandler(eventData) {
+        var acceleration =eventData.accelerationIncludingGravity;
+        x = acceleration.x;
+        y = acceleration.y;
+        if((Math.abs(x-lastX) > speed || Math.abs(y-lastY) > speed || Math.abs(z-lastZ) > speed) && btn) {
+            i += parseInt(1);
+            box.innerHTML = i;
+            setInterval(function(){
+                $(".pers").html(i)
+            }, 1000);
+        }
+        lastX = x;
+        lastY = y;
+        lastZ = z;
+    }
+
+})
+
+</script>
+</body>
+</html>

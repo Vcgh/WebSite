@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<title>微信摇一摇</title>
+</head>
+<body>
+<div class="wechart">
+    <div class="test"></div>
+    <div class="shadowbox win">
+        <div class="prop_box">
+            <span class="close"></span>
+            <h2>恭喜您</h2>
+            <h3>获得摇一摇红包!</h3>
+            <p>请到服务通知中查收</p>
+            <a href="javascript:;">好的</a>
+        </div>
+    </div>
+    <div class="shadowbox lose">
+        <div class="prop_box">
+            <span class="close"></span>
+            <img src="img/lose_03.png" height="66">
+            <h3>洗洗手，摆好姿势！</h3>
+            <h3>下次一定能摇中！</h3>
+            <a href="javascript:;">好的</a>
+        </div>
+    </div>
+    <div class="shadowbox rest">
+        <div class="prop_box">
+            <img src="img/cup_03.png" width="80" alt="">
+            <p>手酸了吧，可以歇歇啦！<br>系统在计算你跟红包之间的距离...</p>
+        </div>
+    </div>
+
+    <audio src="img/yiy.mp3" controls="controls" loop preload id="music01" hidden></audio>
+    <audio src="img/win.mp3" controls="controls" preload id="music02" hidden></audio>
+
+</div>
+</body>
+<script type="text/javascript">
+$(function(){
+    $(document).on("click",".close,.prop_box a",function(){
+        $(this).parents(".shadowbox").hide();
+    })
+
+    var audio01 = document.getElementById('music01'); 
+    var audio02 = document.getElementById('music02'); 
+    // audio.play();
+
+    btn = true;
+    var box = document.getElementsByClassName("test")[0];
+    if (window.DeviceMotionEvent) {
+        window.addEventListener('devicemotion', deviceMotionHandler, false);
+    } else {
+        alert('大哥，换个iphone再来玩吧！');
+    };
+
+    // 判断安卓
+    var u = navigator.userAgent, app = navigator.appVersion;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+    var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); 
+
+    var i = 0;
+    var distance = 25;
+    var shaked = false;
+    var x = y = z = lastX = lastY = lastZ = 0;
+    function deviceMotionHandler(eventData) {
+        var acceleration =eventData.accelerationIncludingGravity;
+        if (!shaked) { 
+            x = acceleration.x;
+            y = acceleration.y;
+            if((Math.abs(x-lastX) > distance || Math.abs(y-lastY) > distance || Math.abs(z-lastZ) > distance) && btn) {
+                $(".wechart").addClass("active");
+                audio01.play();   
+                // if (isAndroid) {
+                //     i += parseInt(2);
+                // }
+                i += parseInt(1);
+                box.innerHTML = i;
+
+            }
+            lastX = x;
+            lastY = y;
+            lastZ = z;
+            shaked = true;
+        }
+        setInterval(function(){
+            shaked = false;
+        },40)
+    }
+
+})
+</script>
+</html>

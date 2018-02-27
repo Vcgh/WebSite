@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <title>hello world</title>
+    <style type="text/css">
+    .start{
+        display:block;
+        width:50%;
+        height:50px;
+        background:#ddd;
+        text-align:center;
+        line-height:50px;
+    }
+    </style>
+</head>
+
+<body>
+    <span class="start">游戏开始</span>
+    <em class="timeremain" style="font-size: 30px;">10</em>
+    <div id="dmEvent">0</div>
+    <script type="text/javascript">
+    var btn = false;
+    var start = document.getElementsByClassName("start")[0];
+    var timeremain = document.getElementsByClassName("timeremain")[0];
+    start.onclick = function(){
+        start.innerHTML = "游戏进行中"
+    	var time = 10;
+        timeremain.innerHTML = "10"
+        box.innerHTML = "0";
+        btn = true;
+	    i = 0;
+        setInterval(function(){
+            if(time > 0){
+                time -= 1;
+                timeremain.innerHTML = '0'+ time;
+            }
+        },1000)
+        setTimeout(function(){
+            start.innerHTML = "游戏开始"
+            btn = false;
+        },10000)
+    }
+
+    var i = 0;
+    var SHAKE_THRESHOLD = 1;
+    var last_update = 0;
+    var x = y = z = last_x = last_y = last_z = 0;
+    var box = document.getElementById("dmEvent");
+    if (window.DeviceMotionEvent) {
+        window.addEventListener('devicemotion', deviceMotionHandler, false);
+    } else {
+        // alert('大哥，换个iphone再来玩吧！');
+    };
+    function deviceMotionHandler(eventData) {
+        var acceleration = eventData.accelerationIncludingGravity;
+        var curTime = new Date().getTime();
+        if ((curTime - last_update) > 100) {
+            var diffTime = curTime - last_update;
+            last_update = curTime;
+            x = acceleration.x;
+            y = acceleration.y;
+            z = acceleration.z;
+            var speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10;
+            if (speed > SHAKE_THRESHOLD && btn) {
+                i += 1;
+                box.innerHTML = i;
+            }
+            last_x = x;
+            last_y = y;
+            last_z = z;
+        }
+    }
+    </script>
+</body>
+
+</html>
